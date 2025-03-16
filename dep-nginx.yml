@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-depl
+  labels:
+    app: mvb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mvb
+  template:
+    metadata:
+      labels:
+        app: mvb
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+      initContainers:
+      - name: wait-for-service
+        image: busybox 
+        command: ['sh', '-c', 'until nslookup nginx-service.default.svc.cluster.local; do echo waiting for nginx-service; sleep 2; done;']
+        

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-depl
+  labels:
+    app: mvb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mvb
+  template:
+    metadata:
+      labels:
+        app: mvb
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+      - name: multitool
+        image: wbitt/network-multitool
+        ports:
+        - containerPort: 8080
+        command: ["/bin/sh", "-c", "httpd -p 8080 -h / & sleep infinity"]
